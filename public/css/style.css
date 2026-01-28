@@ -1,0 +1,65 @@
+:root {
+  --text-color: #000000;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", Arial, sans-serif;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.error-container span div {
+  width: 2px;
+  height: 26px;
+  background-color: #000000;
+  border-radius: 1rem;
+  display: inline-block;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+}
+
+header input {
+  border: 1px solid #000000;
+  border-radius: 16px 0 0 16px;
+  width: 300px;
+  margin: 8px 0;
+  padding: 6px;
+}
+
+header button {
+  border: 1px solid #000000;
+  border-radius: 0 16px 16px 0;
+  margin: 8px -5px;
+  padding: 6px;
+  width: 28px;
+}
+
+header button img {
+  margin: -2px;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+}
+
+.clock-container {
+  width: 100px;
+}
