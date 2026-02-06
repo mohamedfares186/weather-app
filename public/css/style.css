@@ -9,10 +9,9 @@
   font-family: "Montserrat", Arial, sans-serif;
 }
 
-.container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
+body {
+  background: #f5f7fa;
+  color: #222;
 }
 
 .error-container {
@@ -22,7 +21,7 @@
   height: 100vh;
 }
 
-.error-container span div {
+.error-container div {
   width: 2px;
   height: 26px;
   background-color: #000000;
@@ -30,36 +29,170 @@
   display: inline-block;
 }
 
-header {
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-header input {
-  border: 1px solid #000000;
-  border-radius: 16px 0 0 16px;
-  width: 300px;
-  margin: 8px 0;
-  padding: 6px;
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 25px;
+  gap: 20px;
+}
+
+.location-button {
+  margin: 0px 8px;
+  border: 0px;
+  border-radius: 1rem;
+  background-color: #222;
+  color: #d1d5db;
+  padding: 0.6rem;
+  font-size: 1rem;
+}
+
+header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 20px;
+  padding: 15px 25px;
+  border-bottom: 1px solid #d1d5db;
+}
+
+header .logo-container {
+  display: flex;
+  align-items: center;
+}
+
+header .search-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+header .search-container input {
+  max-width: 400px;
+  padding: 10px 14px;
+  border-radius: 999px 0 0 999px;
+  border: 1px solid #d1d5db;
+  font-size: 1rem;
 }
 
 header button {
-  border: 1px solid #000000;
-  border-radius: 0 16px 16px 0;
-  margin: 8px -5px;
-  padding: 6px;
-  width: 28px;
+  border: 1px solid #d1d5db;
+  border-radius: 0 999px 999px 0;
+  margin: 0px -5px;
+  padding: 11px 16px;
+  max-width: 64px;
 }
 
-header button img {
-  margin: -2px;
+header .clock-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+header .clock-container .clock {
+  width: 100%;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+/* Weather Cards Container */
+.current-location-data {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  width: 100%;
+}
+
+.location-data,
+.location-forecast {
+  flex: 1;
+}
+
+/* All Weather Cards - Consistent Styling */
+.weather-card,
+.first-day,
+.second-day {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  min-height: 280px;
+}
+
+.weather-card h2 {
+  font-size: 3rem;
+  margin: 10px 0;
+  color: #222;
+}
+
+.weather-card p,
+.first-day p,
+.second-day p {
+  font-size: 1.1rem;
+  color: #555;
+  margin: 5px 0;
+}
+
+/* Future Forecast Container */
+.location-future-forecast {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  height: auto;
+}
+
+.first-day,
+.second-day {
+  flex: 1;
+}
+
+/* Forecast Card Specific Styling */
+.wind-text,
+.max-temp-text,
+.min-temp-text,
+.humidity-text,
+.rain-text {
+  margin: 5px 0;
+}
+
+/* Future Forecast Specific Styling */
+.first-day p:first-child,
+.second-day p:first-child {
+  font-weight: 600;
+  color: #222;
+  font-size: 1rem;
+}
+
+.first-day p:nth-child(2),
+.second-day p:nth-child(2) {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #222;
+  margin: 10px 0;
+}
+
+.first-day p:nth-child(3),
+.second-day p:nth-child(3) {
+  font-weight: 500;
+  color: #222;
 }
 
 footer {
   display: flex;
   justify-content: center;
-}
-
-.clock-container {
-  width: 100px;
+  align-items: center;
+  height: 6rem;
 }

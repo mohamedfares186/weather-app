@@ -1,4 +1,4 @@
-import logError from "../middleware/logger.mjs";
+import { logError } from "../middleware/logger.mjs";
 
 const API_KEY = process.env.WEATHER_API_KEY;
 

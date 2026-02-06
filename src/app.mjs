@@ -6,6 +6,7 @@ import hpp from "hpp";
 import path from "path";
 import { fileURLToPath } from "url";
 import logger from "./middleware/logger.mjs";
+import { logError, logWarn } from "./middleware/logger.mjs";
 import router from "./routes/router.mjs";
 
 const app = express();
@@ -13,6 +14,7 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+app.use(logger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "../public")));
@@ -21,18 +23,12 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000",
-      "http://localhost",
-      "https://localhost:3000",
-      "https://localhost",
-      "https://192.168.1.13",
-      "http://192.168.1.13",
-      process.env.FRONTEND_URL,
+      "http://192.168.1.13:3000",
     ],
   }),
 );
 app.use(helmet());
 app.use(hpp());
-app.use(logger);
 
 app.get("/", (req, res) => {
   return res
@@ -53,13 +49,18 @@ app.get("/favicon.ico", (req, res) => {
 app.use("/api", router);
 
 app.use((req, res, next) => {
+  logWarn("Error Not Found / ", {
+    method: req.method,
+    url: req.originalUrl
+  });
+
   return res
     .status(404)
     .sendFile(path.join(__dirname, "../public", "404.html"));
 });
 
 app.use((err, req, res, next) => {
-  console.error("Unhandled Error /", {
+  logError("Unhandled Error / ", {
     method: req.method,
     url: req.originalUrl,
     message: err.message,
