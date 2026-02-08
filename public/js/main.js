@@ -1,5 +1,4 @@
 let currentLocation = {};
-const BASE_URL = `${window.location.protocol}//${window.location.host}/api`;
 const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 const currentTime = new Date().getUTCDate();
 const offset = new Date().getTimezoneOffset() / -60;
@@ -49,10 +48,22 @@ function success(position) {
     longitude: position.coords.longitude,
   };
 
-  const locationData = createElement({ tag: "div", attributes: { class: "location-data", id: "location-data" } });
-  const locationForecast = createElement({ tag: "div", attributes: { class: "location-forecast" } });
-  const currentData = createElement({ tag: "div", attributes: { class: "current-location-data" } });
-  const locationFutureForecast = createElement({ tag: "div", attributes: { class: "location-future-forecast" } });
+  const locationData = createElement({
+    tag: "div",
+    attributes: { class: "location-data", id: "location-data" },
+  });
+  const locationForecast = createElement({
+    tag: "div",
+    attributes: { class: "location-forecast" },
+  });
+  const currentData = createElement({
+    tag: "div",
+    attributes: { class: "current-location-data" },
+  });
+  const locationFutureForecast = createElement({
+    tag: "div",
+    attributes: { class: "location-future-forecast" },
+  });
 
   currentData.append(locationData);
   currentData.append(locationForecast);
@@ -126,7 +137,7 @@ function error(error) {
 async function getWeatherDataForUserLocation(latitude, longitude) {
   try {
     const response = await fetch(
-      `${BASE_URL}/weather?lat=${latitude}&lon=${longitude}`,
+      `/api/weather?lat=${latitude}&lon=${longitude}`,
       {
         method: "GET",
       },
@@ -154,7 +165,8 @@ async function getWeatherDataForUserLocation(latitude, longitude) {
 
     weatherCardTemp.textContent = data.data.current.temp_c + "℃";
     weatherCardCity.textContent = "City: " + data.data.location.name;
-    weatherCardStatus.textContent = "Status: " + data.data.current.condition.text;
+    weatherCardStatus.textContent =
+      "Status: " + data.data.current.condition.text;
 
     locationDataCard.append(weatherCard);
     return;
@@ -167,7 +179,7 @@ async function getWeatherDataForUserLocation(latitude, longitude) {
 async function getForecastDataForUserLocation(latitude, longitude) {
   try {
     const response = await fetch(
-      `${BASE_URL}/forecast?lat=${latitude}&lon=${longitude}`,
+      `/api/forecast?lat=${latitude}&lon=${longitude}`,
       { method: "GET" },
     );
 
@@ -181,27 +193,52 @@ async function getForecastDataForUserLocation(latitude, longitude) {
     const locationForecastCard = document.querySelector(".location-forecast");
 
     const cardTitle = createElement({ tag: "h2" });
-    const windSpeed = createElement({ tag: "p", attributes: { class: "wind-text" } });
-    const maxTemp = createElement({ tag: "p", attributes: { class: "max-temp-text" } });
-    const minTemp = createElement({ tag: "p", attributes: { class: "min-temp-text" } });
-    const humidityText = createElement({ tag: "p", attributes: { class: "humidity-text" } });
-    const willItRain = createElement({ tag: "p", attributes: { class: "rain-text" } });
+    const windSpeed = createElement({
+      tag: "p",
+      attributes: { class: "wind-text" },
+    });
+    const maxTemp = createElement({
+      tag: "p",
+      attributes: { class: "max-temp-text" },
+    });
+    const minTemp = createElement({
+      tag: "p",
+      attributes: { class: "min-temp-text" },
+    });
+    const humidityText = createElement({
+      tag: "p",
+      attributes: { class: "humidity-text" },
+    });
+    const willItRain = createElement({
+      tag: "p",
+      attributes: { class: "rain-text" },
+    });
 
-    const forecastCard = createElement({ tag: "div", attributes: { class: "weather-card" } }, [cardTitle, windSpeed, maxTemp, minTemp, humidityText, willItRain]);
+    const forecastCard = createElement(
+      { tag: "div", attributes: { class: "weather-card" } },
+      [cardTitle, windSpeed, maxTemp, minTemp, humidityText, willItRain],
+    );
 
     cardTitle.textContent = "Forecast";
     windSpeed.textContent = "Wind speed: " + data.data.current.wind_kph + "Kph";
-    maxTemp.textContent = "Max Temperature: " + data.data.forecast.forecastday[0].day.maxtemp_c + "℃";
-    minTemp.textContent = "Min Temperature: " + data.data.forecast.forecastday[0].day.mintemp_c + "℃";
+    maxTemp.textContent =
+      "Max Temperature: " +
+      data.data.forecast.forecastday[0].day.maxtemp_c +
+      "℃";
+    minTemp.textContent =
+      "Min Temperature: " +
+      data.data.forecast.forecastday[0].day.mintemp_c +
+      "℃";
     humidityText.textContent = "Humidity: " + data.data.current.humidity + "%";
-    willItRain.textContent = 
-      data.data.forecast.forecastday[0].day.daily_will_it_rain ? 
-      "High chance of raining today." : "Most likely it won't rain today.";
+    willItRain.textContent = data.data.forecast.forecastday[0].day
+      .daily_will_it_rain
+      ? "High chance of raining today."
+      : "Most likely it won't rain today.";
 
     locationForecastCard.append(forecastCard);
     return;
   } catch (error) {
-    console.log(error)
+    console.log(error);
     main.innerHTML = "Network Error.";
     return;
   }
@@ -211,7 +248,7 @@ async function getForecastDataForUserLocation(latitude, longitude) {
 async function getFutureForecastForUserLocation(latitude, longitude) {
   try {
     const response = await fetch(
-      `${BASE_URL}/forecast/future?lat=${latitude}&lon=${longitude}`,
+      `/api/forecast/future?lat=${latitude}&lon=${longitude}`,
     );
 
     if (!response.ok) {
@@ -223,34 +260,47 @@ async function getFutureForecastForUserLocation(latitude, longitude) {
 
     console.log(data.data.forecast.forecastday);
 
-    const locationFutureForecastCard = document.querySelector(".location-future-forecast");
-    
-    const firstDayDate = createElement({ tag: "p" })
-    const firstDayTemp = createElement({ tag: "p" })
-    const firstDayStatus = createElement({ tag: "p" })
-    const firstDayWillRain = createElement({ tag: "p" })
-    const firstDay = createElement({ tag: "div", attributes: { class: "first-day" } }, [firstDayDate, firstDayTemp, firstDayStatus, firstDayWillRain]);
+    const locationFutureForecastCard = document.querySelector(
+      ".location-future-forecast",
+    );
+
+    const firstDayDate = createElement({ tag: "p" });
+    const firstDayTemp = createElement({ tag: "p" });
+    const firstDayStatus = createElement({ tag: "p" });
+    const firstDayWillRain = createElement({ tag: "p" });
+    const firstDay = createElement(
+      { tag: "div", attributes: { class: "first-day" } },
+      [firstDayDate, firstDayTemp, firstDayStatus, firstDayWillRain],
+    );
 
     firstDayDate.textContent = data.data.forecast.forecastday[1].date;
-    firstDayTemp.textContent = data.data.forecast.forecastday[1].day.avgtemp_c + "℃";
-    firstDayStatus.textContent = data.data.forecast.forecastday[1].day.condition.text;
-    firstDayWillRain.textContent = 
-      data.data.forecast.forecastday[1].day.daily_chance_of_rain ? 
-      "High chance of raining today." : "Most likely it won't rain today.";
+    firstDayTemp.textContent =
+      data.data.forecast.forecastday[1].day.avgtemp_c + "℃";
+    firstDayStatus.textContent =
+      data.data.forecast.forecastday[1].day.condition.text;
+    firstDayWillRain.textContent = data.data.forecast.forecastday[1].day
+      .daily_chance_of_rain
+      ? "High chance of raining today."
+      : "Most likely it won't rain today.";
 
+    const secondDayDate = createElement({ tag: "p" });
+    const secondDayTemp = createElement({ tag: "p" });
+    const secondDayStatus = createElement({ tag: "p" });
+    const secondDayWillRain = createElement({ tag: "p" });
+    const secondDay = createElement(
+      { tag: "div", attributes: { class: "second-day" } },
+      [secondDayDate, secondDayTemp, secondDayStatus, secondDayWillRain],
+    );
 
-      const secondDayDate = createElement({ tag: "p" })
-      const secondDayTemp = createElement({ tag: "p" })
-      const secondDayStatus = createElement({ tag: "p" })
-      const secondDayWillRain = createElement({ tag: "p" })
-      const secondDay = createElement({ tag: "div", attributes: { class: "second-day" } }, [secondDayDate, secondDayTemp, secondDayStatus, secondDayWillRain]);
-      
-      secondDayDate.textContent = data.data.forecast.forecastday[2].date;
-      secondDayTemp.textContent = data.data.forecast.forecastday[2].day.avgtemp_c + "℃";
-      secondDayStatus.textContent = data.data.forecast.forecastday[2].day.condition.text;
-      secondDayWillRain.textContent = 
-      data.data.forecast.forecastday[2].day.daily_chance_of_rain ? 
-      "High chance of raining today." : "Most likely it won't rain today.";
+    secondDayDate.textContent = data.data.forecast.forecastday[2].date;
+    secondDayTemp.textContent =
+      data.data.forecast.forecastday[2].day.avgtemp_c + "℃";
+    secondDayStatus.textContent =
+      data.data.forecast.forecastday[2].day.condition.text;
+    secondDayWillRain.textContent = data.data.forecast.forecastday[2].day
+      .daily_chance_of_rain
+      ? "High chance of raining today."
+      : "Most likely it won't rain today.";
 
     locationFutureForecastCard.append(firstDay);
     locationFutureForecastCard.append(secondDay);
@@ -263,7 +313,7 @@ async function getFutureForecastForUserLocation(latitude, longitude) {
 
 async function getFutureForecastForCity(city) {
   try {
-    const response = await fetch(`${BASE_URL}/forecast/search?city=${city}`);
+    const response = await fetch(`/api/forecast/search?city=${city}`);
 
     if (!response.ok) {
       main.textContent = response.message;
@@ -281,12 +331,9 @@ async function getFutureForecastForCity(city) {
 
 async function getForecastDataForCity(city) {
   try {
-    const response = await fetch(
-      `${BASE_URL}/forecast/future/search?city=${city}`,
-      {
-        method: "GET",
-      },
-    );
+    const response = await fetch(`/api/forecast/future/search?city=${city}`, {
+      method: "GET",
+    });
 
     if (!response.ok) {
       main.append(JSON.stringify(await response.json()));
