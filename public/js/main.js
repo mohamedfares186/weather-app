@@ -237,8 +237,7 @@ async function getForecastDataForUserLocation(latitude, longitude) {
 
     locationForecastCard.append(forecastCard);
     return;
-  } catch (error) {
-    console.log(error);
+  } catch {
     main.innerHTML = "Network Error.";
     return;
   }
@@ -257,8 +256,6 @@ async function getFutureForecastForUserLocation(latitude, longitude) {
     }
 
     const data = await response.json();
-
-    console.log(data.data.forecast.forecastday);
 
     const locationFutureForecastCard = document.querySelector(
       ".location-future-forecast",
@@ -413,9 +410,10 @@ function formatTime12Hour(date) {
 
 function clock() {
   const container = document.querySelector(".clock");
+  const clockContainer = document.querySelector(".clock-container");
 
   if (!container) {
-    console.warn("Clock container not found");
+    clockContainer.textContent = "Can't show the clock at the moment.";
     return;
   }
 
