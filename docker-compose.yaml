@@ -1,0 +1,33 @@
+services:
+  # Weather App Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: weather_app
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - WEATHER_API_KEY=${WEATHER_API_KEY}
+    ports:
+      - "3000:3000"
+    networks:
+      - weather_app_network
+
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: weather_app_server
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    networks:
+      - weather_app_network
+
+networks:
+  weather_app_network:
+    driver: bridge

@@ -1,35 +1,49 @@
 import { logError } from "../middleware/logger.mjs";
 
-const API_KEY = process.env.WEATHER_API_KEY;
+const WEATHER_API_key = process.env.WEATHER_API_KEY;
 
-const weather = async (req, res) => {
+const weatherController = async (req, res) => {
   try {
-    const { lat, lon } = req.query;
+    const { lat, lon, city } = req.query;
+    const query = city || `${lat},${lon}`;
 
+    if (!query) {
+      return res.status(400).json({
+        success: false,
+        message: "Location required",
+      });
+    }
+
+    // Single API call gets everything
     const response = await fetch(
-      `http://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${lat},${lon}`,
-      {
-        method: "GET",
-      },
+      `http://api.weatherapi.com/v1/forecast.json?key=${WEATHER_API_key}&q=${query}&days=3`,
     );
 
     if (!response.ok) {
-      return res
-        .status(response.status)
-        .json({ success: false, message: response.statusText });
+      return res.status(response.status).json({
+        success: false,
+        message: response.statusText,
+      });
     }
 
-    return res.status(response.status).json({
+    const data = await response.json();
+
+    // Transform to cleaner structure
+    return res.status(200).json({
       success: true,
-      message: "Found successfully.",
-      data: await response.json(),
+      data: {
+        location: data.location,
+        current: data.current,
+        forecast: data.forecast.forecastday,
+      },
     });
   } catch (error) {
-    logError("Error getting current user location weather data /", error);
-    return res
-      .status(500)
-      .json({ success: false, message: "Internal Server Error." });
+    logError("Weather API Error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
   }
 };
 
-export default weather;
+export default weatherController;
